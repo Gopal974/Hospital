@@ -1,0 +1,2782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .login-container {
+            background: rgba(45, 45, 45, 0.95);
+            color: #e0e0e0;
+            border: 1px solid rgba(224, 224, 224, 0.1);
+        }
+
+        body.dark-mode .form-group label {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .form-group input {
+            background: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .type-btn {
+            background: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .type-btn:hover {
+            background: #4d4d4d;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .type-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        body.dark-mode .google-btn {
+            background: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .google-btn:hover {
+            background: #4d4d4d;
+            border-color: #4285f4;
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .divider span {
+            background: rgba(45, 45, 45, 0.95);
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .divider::before {
+            background: #4d4d4d;
+        }
+
+        body.dark-mode .auth-links a {
+            color: #8fa4f3;
+        }
+
+        body.dark-mode .dashboard-header {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .content-card {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .table th {
+            background: #3d3d3d;
+        }
+
+        body.dark-mode .mobile-nav-menu {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .mobile-nav-close {
+            color: #e0e0e0;
+        }
+
+        body.login-mode {
+            background:  url('https://thumbs.dreamstime.com/b/healthcare-medical-concept-medicine-doctor-stethoscope-hand-patients-come-to-hospital-background-179931139.jpg') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        body.login-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://thumbs.dreamstime.com/b/healthcare-medical-concept-medicine-doctor-stethoscope-hand-patients-come-to-hospital-background-179931139.jpg') repeat;
+            opacity: 0.05;
+            z-index: 1;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin: 1rem;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .type-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            color: #333;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .google-btn:hover {
+            border-color: #4285f4;
+            box-shadow: 0 2px 10px rgba(66, 133, 244, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #666;
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .auth-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 0 0.5rem;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .mobile-nav-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            padding: 2rem 1rem;
+        }
+
+        .mobile-nav-menu.active {
+            right: 0;
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .mobile-nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .mobile-nav-buttons .nav-btn {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        /* Research Hub Button Animations */
+        #doctor-research button {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #doctor-research button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        #doctor-research .research-content button[style*="background: #27ae60"]:hover {
+            background: #229954 !important;
+        }
+        
+        #doctor-research .research-content button[style*="background: #f39c12"]:hover {
+            background: #e67e22 !important;
+        }
+        
+        #doctor-research .research-content button[style*="background: #9b59b6"]:hover {
+            background: #8e44ad !important;
+        }
+        
+        #doctor-research .research-content button[style*="background: #667eea"]:hover {
+            background: #5a6fd8 !important;
+        }
+        
+        #doctor-research .research-content button[style*="background: white"]:hover {
+            background: #f8f9fa !important;
+        }
+
+        .mobile-profile-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 1rem;
+        }
+
+        body.dark-mode .mobile-profile-info {
+            border-bottom-color: #3d3d3d;
+        }
+
+        .mobile-profile-info .user-avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            margin-left: 1rem;
+        }
+
+        .theme-toggle:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        body.dark-mode .skeleton {
+            background: linear-gradient(90deg, #3d3d3d 25%, #4d4d4d 50%, #3d3d3d 75%);
+            background-size: 200% 100%;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            height: 120px;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .skeleton-text {
+            height: 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+        }
+
+        .skeleton-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        /* Micro-animations */
+        .btn {
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            transition: all 0.1s;
+        }
+
+        .content-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .form-group input {
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .stat-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .table tr {
+            transition: all 0.2s ease;
+        }
+
+        .table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+        }
+
+        .user-avatar {
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .dashboard-section {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dashboard-section.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .patient-card img {
+            transition: all 0.3s ease;
+        }
+
+        .patient-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .status-badge {
+            transition: all 0.2s ease;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        /* Chat Support Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        body.dark-mode .chat-window {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 0.8rem;
+            border-radius: 15px;
+            animation: messageSlide 0.3s ease;
+        }
+
+        .chat-message.user {
+            background: #667eea;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.staff {
+            background: #f0f0f0;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        body.dark-mode .chat-message.staff {
+            background: #3d3d3d;
+            color: #e0e0e0;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .chat-input-area {
+            border-top-color: #3d3d3d;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #e9ecef;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        body.dark-mode .chat-input {
+            background: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+
+        .chat-send {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chat-window {
+                width: 300px;
+                height: 400px;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .user-info {
+                gap: 0.5rem;
+            }
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.2) rotate(360deg);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .patient-card {
+            animation: fadeIn 0.8s ease-in;
+            transition: all 0.3s ease;
+        }
+
+        .patient-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .today-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .today-info::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&h=300&fit=crop') no-repeat center;
+            background-size: cover;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
+        .today-info h3 {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .today-info ul {
+            position: relative;
+            z-index: 2;
+            list-style: none;
+        }
+
+        .today-info li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .today-info li:last-child {
+            border-bottom: none;
+        }
+
+        .reminder-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+                max-width: 90%;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .user-type-selector {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .type-btn {
+                padding: 0.8rem;
+            }
+            
+            .dashboard-header {
+                padding: 1rem;
+            }
+            
+            .dashboard-nav {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .mobile-nav-overlay.active {
+                display: block;
+            }
+            
+            .user-info > div {
+                display: none;
+            }
+            
+            .user-info .user-avatar {
+                margin-right: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .dashboard-content {
+                padding: 1rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+            
+            .table {
+                font-size: 0.9rem;
+            }
+            
+            .table th,
+            .table td {
+                padding: 0.5rem;
+            }
+            
+            .today-info {
+                padding: 1.5rem;
+            }
+            
+            .today-info li {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .patient-card img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            footer {
+                padding: 2rem 0;
+            }
+            
+            footer > div {
+                padding: 0 1rem;
+            }
+            
+            footer div[style*="grid"] {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="logo">🏥  Dermaco Hospital</div>
+        
+        <div class="user-type-selector">
+            <button class="type-btn active" data-type="patient">Patient</button>
+            <button class="type-btn" data-type="doctor">Doctor</button>
+        </div>
+
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-login_uri="http://localhost:3000/auth/callback"
+             data-auto_prompt="false"
+             data-callback="handleGoogleSignIn">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left">
+        </div>
+        
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        
+        <form id="signupForm" style="display: none;">
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="firstName" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="lastName" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="signupEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="signupPassword" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Join Now</button>
+        </form>
+        
+        <div class="auth-links">
+            <a href="#" onclick="forgotPassword()" id="forgotLink">Forgot Password?</a>
+            <a href="#" onclick="showSignup()" id="signupLink">Sign Up</a>
+            <a href="#" onclick="showLogin()" id="loginLink" style="display: none;">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- Patient Dashboard -->
+    <div id="patientDashboard" class="dashboard">
+        <div class="dashboard-header">
+            <div class="user-info">
+                <div class="user-avatar" onclick="toggleProfile()">P</div>
+                <div>
+                    <div id="patientName" onclick="toggleUserInfo()">John Doe</div>
+                    <div id="patientCredentials" style="display: none;">
+                        <small>Patient ID: P001</small>
+                    </div>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+            </div>
+            
+            <div class="dashboard-nav">
+                <button class="nav-btn active" onclick="showSection('patient-overview')">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('patient-appointments')">Appointments</button>
+                <button class="nav-btn" onclick="showSection('patient-records')">Medical Records</button>
+                <button class="nav-btn" onclick="showSection('patient-billing')">Billing</button>
+                <button class="nav-btn" onclick="showSection('patient-about')">About</button>
+                <button class="logout-btn" onclick="logout()">Sign Out</button>
+            </div>
+            
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+        
+        <div class="mobile-nav-overlay" onclick="closeMobileMenu()"></div>
+        <div class="mobile-nav-menu" id="mobileNavMenu">
+            <button class="mobile-nav-close" onclick="closeMobileMenu()">✕</button>
+            <div class="mobile-nav-buttons">
+                <div class="mobile-profile-info">
+                    <div class="user-avatar">P</div>
+                    <div>
+                        <div id="mobilePatientName">John Doe</div>
+                        <small>Patient ID: P001</small>
+                    </div>
+                </div>
+                <button class="nav-btn active" onclick="showSection('patient-overview'); closeMobileMenu();">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('patient-appointments'); closeMobileMenu();">Appointments</button>
+                <button class="nav-btn" onclick="showSection('patient-records'); closeMobileMenu();">Medical Records</button>
+                <button class="nav-btn" onclick="showSection('patient-billing'); closeMobileMenu();">Billing</button>
+                <button class="nav-btn" onclick="showSection('patient-about'); closeMobileMenu();">About</button>
+                <button class="logout-btn" onclick="logout(); closeMobileMenu();">Sign Out</button>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Patient Overview -->
+            <div id="patient-overview" class="dashboard-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">2</div>
+                        <div>Upcoming Appointments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div>Total Visits</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div>Pending Bills</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">A+</div>
+                        <div>Blood Group</div>
+                    </div>
+                </div>
+
+                <h1 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Patient Information</h1>
+                
+                <div style="display: flex; justify-content: center;">
+                    <div class="content-card patient-card" style="text-align: center; max-width: 400px;">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face" alt="Patient" style="width: 150px; height: 150px; border-radius: 50%; margin-bottom: 1rem; object-fit: cover; border: 4px solid #667eea;">
+                        <h3 style="color: #667eea; margin-bottom: 1rem;">John Doe</h3>
+                        <p><strong>Age:</strong> 35 years</p>
+                        <p><strong>Disease:</strong> Hypertension</p>
+                        <p><strong>Blood Group:</strong> A+</p>
+                        <div class="patient-details" style="display: none;">
+                            <p><strong>Phone:</strong> +91 98765 43210</p>
+                            <p><strong>Email:</strong> john.doe@email.com</p>
+                            <p><strong>Address:</strong> 123 Main Street, City</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="toggleDetails(this)">Show Details</button>
+                    </div>
+                </div>
+
+                <div class="today-info">
+                    <h3>📅 Today's Information</h3>
+                    <ul>
+                        <li>
+                            <div class="reminder-icon">💊</div>
+                            <div>
+                                <strong>Morning Medication</strong><br>
+                                <small>Take at 8:00 AM - Aspirin 75mg</small>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="reminder-icon">👨‍⚕️</div>
+                            <div>
+                                <strong>Appointment with Dr. Smith</strong><br>
+                                <small>Today at 2:00 PM - Cardiology Checkup</small>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="reminder-icon">🩺</div>
+                            <div>
+                                <strong>Blood Pressure Check</strong><br>
+                                <small>Due today - Monitor your BP levels</small>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="reminder-icon">🏃‍♂️</div>
+                            <div>
+                                <strong>Exercise Reminder</strong><br>
+                                <small>30 minutes walk recommended</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Patient Appointments -->
+            <div id="patient-appointments" class="dashboard-section">
+                <div class="content-card">
+                    <h3>Upcoming Appointments</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Doctor</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-01-20</td>
+                                <td>2:00 PM</td>
+                                <td>Dr. Smith</td>
+                                <td>Cardiology</td>
+                                <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                                <td>
+                                    <button class="btn btn-primary">Reschedule</button>
+                                    <button class="btn btn-danger">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2025-01-25</td>
+                                <td>10:00 AM</td>
+                                <td>Dr. Johnson</td>
+                                <td>General</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-primary">Reschedule</button>
+                                    <button class="btn btn-danger">Cancel</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-card">
+                    <h3>Book New Appointment</h3>
+                    <form id="bookAppointmentForm">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" placeholder="First Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" placeholder="Last Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" placeholder="Phone No." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text" placeholder="Address" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select required>
+                                <option value="">Select Department</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="pediatrics">Pediatrics</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="emergency">Emergency</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Date</label>
+                            <input type="date" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Patient Medical Records -->
+            <div id="patient-records" class="dashboard-section">
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; margin-bottom: 2rem;">
+                    <div class="content-card">
+                        <h3>💊 Prescription History</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Doctor</th>
+                                    <th>Medication</th>
+                                    <th>Dosage</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2025-01-15</td>
+                                    <td>Dr. Smith</td>
+                                    <td>Aspirin</td>
+                                    <td>75mg</td>
+                                    <td>30 days</td>
+                                </tr>
+                                <tr>
+                                    <td>2025-01-10</td>
+                                    <td>Dr. Johnson</td>
+                                    <td>Metformin</td>
+                                    <td>500mg</td>
+                                    <td>90 days</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="content-card" style="text-align: center;">
+                        <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=250&h=200&fit=crop" alt="Medical Records" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                        <h4 style="color: #667eea;">Digital Health Records</h4>
+                        <p style="font-size: 0.9rem; color: #666;">Secure & Accessible</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="content-card">
+                        <h3>🩺 Lab Reports</h3>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e9ecef; border-radius: 10px; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=60&h=60&fit=crop" alt="Blood Test" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <strong>Blood Test Report</strong><br>
+                                <small style="color: #666;">Jan 15, 2025</small>
+                            </div>
+                            <button class="btn btn-primary">Download</button>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e9ecef; border-radius: 10px; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=60&h=60&fit=crop" alt="X-Ray" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <strong>X-Ray Report</strong><br>
+                                <small style="color: #666;">Jan 10, 2025</small>
+                            </div>
+                            <button class="btn btn-primary">Download</button>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e9ecef; border-radius: 10px;">
+                            <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=60&h=60&fit=crop" alt="MRI Scan" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <strong>MRI Scan Report</strong><br>
+                                <small style="color: #666;">Jan 5, 2025</small>
+                            </div>
+                            <button class="btn btn-primary">Download</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card">
+                        <h3>🏥 Medical History</h3>
+                        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                            <h4 style="margin-bottom: 0.5rem;">Recent Visit</h4>
+                            <p><strong>Date:</strong> Jan 15, 2025</p>
+                            <p><strong>Doctor:</strong> Dr. Smith</p>
+                            <p><strong>Diagnosis:</strong> Hypertension Management</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 1.5rem; border-radius: 15px; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏥</div>
+                            <h4 style="margin-bottom: 0.5rem;">Medical Equipment</h4>
+                            <p><strong>MRI Scanner:</strong> Available</p>
+                            <p><strong>CT Scan:</strong> Scheduled</p>
+                            <p><strong>X-Ray:</strong> Ready</p>
+                            <p><strong>Ultrasound:</strong> Available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Billing -->
+            <div id="patient-billing" class="dashboard-section">
+                <div class="content-card">
+                    <h3>Pending Bills</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Bill ID</th>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>B001</td>
+                                <td>2025-01-15</td>
+                                <td>Consultation</td>
+                                <td>₹500</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn btn-success">Pay Now</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-card">
+                    <h3>Payment History</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th>Amount</th>
+                                <th>Payment Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-01-10</td>
+                                <td>Lab Test</td>
+                                <td>₹800</td>
+                                <td>Card</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="patient-about" class="dashboard-section">
+                <div class="content-card">
+                    <iframe src="main.html" width="100%" height="600px" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer style="background: #2c3e50; color: white; padding: 3rem 0; text-align: center; margin-top: 3rem;">
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem;">
+                    <div>
+                        <h3 style="color: #3498db; margin-bottom: 1.5rem;">🏥 Hospital Management</h3>
+                        <p style="line-height: 1.6;">Providing quality healthcare services with advanced technology and compassionate care.</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 1.5rem;">Quick Links</h4>
+                        <p style="margin-bottom: 0.8rem;">Emergency: +91 98765 43210</p>
+                        <p style="margin-bottom: 0.8rem;">Appointments: +91 98765 43211</p>
+                        <p>Email: info@hospital.com</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 1.5rem;">Services</h4>
+                        <p style="margin-bottom: 0.8rem;">24/7 Emergency Care</p>
+                        <p style="margin-bottom: 0.8rem;">Specialized Treatments</p>
+                        <p>Advanced Diagnostics</p>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid #34495e; padding-top: 2rem;">
+                    <p>&copy; 2025 Hospital Management System. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        </div>
+    </div>
+
+    <!-- Doctor Dashboard -->
+    <div id="doctorDashboard" class="dashboard">
+        <div class="dashboard-header">
+            <div class="user-info">
+                <div class="user-avatar" onclick="toggleProfile()">D</div>
+                <div>
+                    <div id="doctorName" onclick="toggleUserInfo()">Dr. Smith</div>
+                    <div id="doctorCredentials" style="display: none;">
+                        <small>Cardiology | ID: D001</small>
+                    </div>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌙</button>
+            </div>
+            
+            <div class="dashboard-nav">
+                <button class="nav-btn active" onclick="showSection('doctor-overview')">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('doctor-appointments')">Appointments</button>
+                <button class="nav-btn" onclick="showSection('doctor-patients')">Patients</button>
+                <button class="nav-btn" onclick="showSection('doctor-prescriptions')">Prescriptions</button>
+                <button class="nav-btn" onclick="showDoctorSection('doctor-reports')">Reports</button>
+                <button class="nav-btn" onclick="showDoctorSection('doctor-research')">🔬 Research Hub</button>
+                <button class="logout-btn" onclick="logout()">Sign Out</button>
+            </div>
+            
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+        
+        <div class="mobile-nav-overlay" onclick="closeMobileMenu()"></div>
+        <div class="mobile-nav-menu" id="doctorMobileNavMenu">
+            <button class="mobile-nav-close" onclick="closeMobileMenu()">✕</button>
+            <div class="mobile-nav-buttons">
+                <div class="mobile-profile-info">
+                    <div class="user-avatar">D</div>
+                    <div>
+                        <div id="mobileDoctorName">Dr. Smith</div>
+                        <small>Cardiology | ID: D001</small>
+                    </div>
+                </div>
+                <button class="nav-btn active" onclick="showSection('doctor-overview'); closeMobileMenu();">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('doctor-appointments'); closeMobileMenu();">Appointments</button>
+                <button class="nav-btn" onclick="showSection('doctor-patients'); closeMobileMenu();">Patients</button>
+                <button class="nav-btn" onclick="showSection('doctor-prescriptions'); closeMobileMenu();">Prescriptions</button>
+                <button class="nav-btn" onclick="showDoctorSection('doctor-reports'); closeMobileMenu();">Reports</button>
+                <button class="nav-btn" onclick="showDoctorSection('doctor-research'); closeMobileMenu();">🔬 Research Hub</button>
+                <button class="logout-btn" onclick="logout(); closeMobileMenu();">Sign Out</button>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Doctor Overview -->
+            <div id="doctor-overview" class="dashboard-section active">
+                <div class="stats-grid">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+                        <div class="stat-number">12</div>
+                        <div>Today's Patients</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📋</div>
+                        <div class="stat-number">3</div>
+                        <div>Pending Reports</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+                        <div class="stat-number">8</div>
+                        <div>Completed</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">💰</div>
+                        <div class="stat-number">₹15K</div>
+                        <div>Today's Earnings</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                    <div class="content-card">
+                        <h3>📅 Today's Schedule</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Patient</th>
+                                    <th>Age</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>9:00 AM</td>
+                                    <td>John Doe</td>
+                                    <td>35</td>
+                                    <td>Chest Pain</td>
+                                    <td><span class="status-badge status-pending">Waiting</span></td>
+                                    <td><button class="btn btn-primary">Start</button></td>
+                                </tr>
+                                <tr>
+                                    <td>10:00 AM</td>
+                                    <td>Sarah Wilson</td>
+                                    <td>28</td>
+                                    <td>Checkup</td>
+                                    <td><span class="status-badge status-confirmed">Completed</span></td>
+                                    <td><button class="btn btn-success">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="content-card" style="text-align: center;">
+                        <img src="https://static.vecteezy.com/system/resources/previews/027/298/490/non_2x/doctor-posing-portrait-free-photo.jpg" alt="Doctor" style="width: 100%; height: 200px; object-fit: cover; border-radius: 15px; margin-bottom: 1rem;">
+                        <h4 style="color: #667eea;">Dr. Smith</h4>
+                        <p style="color: #666; margin-bottom: 1rem;">Cardiology Specialist</p>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">
+                            <p><strong>Experience:</strong> 15 years</p>
+                            <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ 4.9/5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Appointments -->
+            <div id="doctor-appointments" class="dashboard-section">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                    <div class="content-card">
+                        <h3>📋 Appointment Requests</h3>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem; border: 2px solid #e9ecef; border-radius: 15px; margin-bottom: 1rem; transition: all 0.3s;" onmouseover="this.style.borderColor='#667eea'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e9ecef'; this.style.transform='translateY(0)'">
+                            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=60&h=60&fit=crop&crop=face" alt="Patient" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <h4>Mike Johnson</h4>
+                                <p><strong>Date:</strong> 2025-01-22 | <strong>Time:</strong> 3:00 PM</p>
+                                <p><strong>Reason:</strong> Follow-up Consultation</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-success">Accept</button>
+                                <button class="btn btn-danger">Reject</button>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem; border: 2px solid #e9ecef; border-radius: 15px; transition: all 0.3s;" onmouseover="this.style.borderColor='#667eea'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e9ecef'; this.style.transform='translateY(0)'">
+                            <img src="https://wallpaperaccess.com/full/2562964.jpg" alt="Patient" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <h4>Emma Davis</h4>
+                                <p><strong>Date:</strong> 2025-01-23 | <strong>Time:</strong> 11:00 AM</p>
+                                <p><strong>Reason:</strong> Chest Pain Evaluation</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-success">Accept</button>
+                                <button class="btn btn-danger">Reject</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center;">
+                        <h3>🕒 Schedule Overview</h3>
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=200&h=150&fit=crop" alt="Schedule" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 1rem 0; opacity: 0.8;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <p><strong>Next Appointment:</strong></p>
+                            <p>9:00 AM - John Doe</p>
+                            <p>Chest Pain Consultation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Patients -->
+            <div id="doctor-patients" class="dashboard-section">
+                <div class="content-card" style="text-align: center; margin-bottom: 2rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+                    <h2>Patient Management</h2>
+                    <p style="margin: 1rem 0;">Comprehensive patient records and medical history tracking</p>
+                    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <div style="font-size: 1.5rem; font-weight: bold;">156</div>
+                            <div>Total Patients</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <div style="font-size: 1.5rem; font-weight: bold;">12</div>
+                            <div>Active Today</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <div style="font-size: 1.5rem; font-weight: bold;">8</div>
+                            <div>Critical Cases</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                    <div class="content-card patient-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face" alt="Patient" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                            <div>
+                                <h4>John Doe</h4>
+                                <p><strong>ID:</strong> P001 | <strong>Age:</strong> 35</p>
+                                <p><strong>Last Visit:</strong> 2025-01-15</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <p><strong>Condition:</strong> Hypertension</p>
+                            <p><strong>Blood Group:</strong> A+</p>
+                            <p><strong>Phone:</strong> +91 98765 43210</p>
+                            <p><strong>Emergency Contact:</strong> +91 98765 43211</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn" style="flex: 1; background: white; color: #667eea; font-weight: bold;">View History</button>
+                            <button class="btn" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Call</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card patient-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=80&h=80&fit=crop&crop=face" alt="Patient" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                            <div>
+                                <h4>Sarah Wilson</h4>
+                                <p><strong>ID:</strong> P002 | <strong>Age:</strong> 28</p>
+                                <p><strong>Last Visit:</strong> 2025-01-10</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <p><strong>Condition:</strong> Diabetes Type 2</p>
+                            <p><strong>Blood Group:</strong> B+</p>
+                            <p><strong>Phone:</strong> +91 98765 43212</p>
+                            <p><strong>Emergency Contact:</strong> +91 98765 43213</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn" style="flex: 1; background: white; color: #27ae60; font-weight: bold;">View History</button>
+                            <button class="btn" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Call</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card patient-card" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face" alt="Patient" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                            <div>
+                                <h4>Mike Johnson</h4>
+                                <p><strong>ID:</strong> P003 | <strong>Age:</strong> 42</p>
+                                <p><strong>Last Visit:</strong> 2025-01-08</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <p><strong>Condition:</strong> Asthma</p>
+                            <p><strong>Blood Group:</strong> O-</p>
+                            <p><strong>Phone:</strong> +91 98765 43214</p>
+                            <p><strong>Emergency Contact:</strong> +91 98765 43215</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn" style="flex: 1; background: white; color: #f39c12; font-weight: bold;">View History</button>
+                            <button class="btn" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Call</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card patient-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face" alt="Patient" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                            <div>
+                                <h4>Emma Davis</h4>
+                                <p><strong>ID:</strong> P004 | <strong>Age:</strong> 31</p>
+                                <p><strong>Last Visit:</strong> 2025-01-12</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <p><strong>Condition:</strong> Cardiac Arrhythmia</p>
+                            <p><strong>Blood Group:</strong> AB+</p>
+                            <p><strong>Phone:</strong> +91 98765 43216</p>
+                            <p><strong>Emergency Contact:</strong> +91 98765 43217</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn" style="flex: 1; background: white; color: #e74c3c; font-weight: bold;">View History</button>
+                            <button class="btn" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Call</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card patient-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="Patient" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                            <div>
+                                <h4>Robert Chen</h4>
+                                <p><strong>ID:</strong> P005 | <strong>Age:</strong> 55</p>
+                                <p><strong>Last Visit:</strong> 2025-01-14</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <p><strong>Condition:</strong> Arthritis</p>
+                            <p><strong>Blood Group:</strong> O+</p>
+                            <p><strong>Phone:</strong> +91 98765 43218</p>
+                            <p><strong>Emergency Contact:</strong> +91 98765 43219</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn" style="flex: 1; background: white; color: #9b59b6; font-weight: bold;">View History</button>
+                            <button class="btn" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Call</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card patient-card" style="background: linear-gradient(135deg, #16a085, #1abc9c); color: white;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face" alt="Patient" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                            <div>
+                                <h4>Lisa Martinez</h4>
+                                <p><strong>ID:</strong> P006 | <strong>Age:</strong> 29</p>
+                                <p><strong>Last Visit:</strong> 2025-01-16</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <p><strong>Condition:</strong> Migraine</p>
+                            <p><strong>Blood Group:</strong> A-</p>
+                            <p><strong>Phone:</strong> +91 98765 43220</p>
+                            <p><strong>Emergency Contact:</strong> +91 98765 43221</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn" style="flex: 1; background: white; color: #16a085; font-weight: bold;">View History</button>
+                            <button class="btn" style="flex: 1; background: rgba(255,255,255,0.2); color: white; border: 1px solid white;">Call</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Prescriptions -->
+            <div id="doctor-prescriptions" class="dashboard-section">
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem;">
+                    <div>
+                        <div class="content-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; text-align: center; margin-bottom: 2rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">💊</div>
+                            <h3>Create New Prescription</h3>
+                            <p style="margin: 1rem 0;">Digital prescription system for better patient care</p>
+                            <button class="btn" style="background: white; color: #27ae60; font-weight: bold;">New Prescription</button>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>📋 Recent Prescriptions</h3>
+                            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e9ecef; border-radius: 10px; margin-bottom: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=50&h=50&fit=crop&crop=face" alt="Patient" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <strong>John Doe</strong> - Aspirin 75mg<br>
+                                    <small style="color: #666;">2025-01-15 | 30 days</small>
+                                </div>
+                                <button class="btn btn-primary">View</button>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid #e9ecef; border-radius: 10px; margin-bottom: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=50&h=50&fit=crop&crop=face" alt="Patient" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <strong>Sarah Wilson</strong> - Metformin 500mg<br>
+                                    <small style="color: #666;">2025-01-12 | 90 days</small>
+                                </div>
+                                <button class="btn btn-primary">View</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" style="text-align: center;">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=250&h=200&fit=crop" alt="Prescription" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                        <h4 style="color: #667eea;">Digital Prescriptions</h4>
+                        <p style="color: #666; margin-bottom: 1rem;">Secure & Efficient</p>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">
+                            <p><strong>Total Prescriptions:</strong> 156</p>
+                            <p><strong>This Month:</strong> 23</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Reports -->
+            <div id="doctor-reports" class="dashboard-section">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                    <div class="content-card">
+                        <h3>🧪 Lab Reports</h3>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem; border: 2px solid #27ae60; border-radius: 15px; margin-bottom: 1rem; background: rgba(39, 174, 96, 0.05);">
+                            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=60&h=60&fit=crop" alt="Blood Test" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <h4>John Doe - Blood Test</h4>
+                                <p><strong>Date:</strong> 2025-01-15</p>
+                                <p><strong>Status:</strong> <span class="status-badge status-confirmed">Ready</span></p>
+                            </div>
+                            <button class="btn btn-primary">View Report</button>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem; border: 2px solid #f39c12; border-radius: 15px; margin-bottom: 1rem; background: rgba(243, 156, 18, 0.05);">
+                            <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=60&h=60&fit=crop" alt="X-Ray" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <h4>Sarah Wilson - X-Ray</h4>
+                                <p><strong>Date:</strong> 2025-01-14</p>
+                                <p><strong>Status:</strong> <span class="status-badge status-pending">Processing</span></p>
+                            </div>
+                            <button class="btn btn-primary">View Report</button>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem; border: 2px solid #667eea; border-radius: 15px; background: rgba(102, 126, 234, 0.05);">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="MRI" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover;">
+                            <div style="flex: 1;">
+                                <h4>Mike Johnson - MRI Scan</h4>
+                                <p><strong>Date:</strong> 2025-01-13</p>
+                                <p><strong>Status:</strong> <span class="status-badge status-confirmed">Ready</span></p>
+                            </div>
+                            <button class="btn btn-primary">View Report</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="content-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center; margin-bottom: 1rem;">
+                            <div style="font-size: 2.5rem; margin-bottom: 1rem;">📊</div>
+                            <h4>Reports Summary</h4>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+                                <p><strong>Pending:</strong> 3</p>
+                                <p><strong>Completed:</strong> 15</p>
+                                <p><strong>This Week:</strong> 8</p>
+                            </div>
+                        </div>
+                        
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=200&h=150&fit=crop" alt="Medical Reports" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px;">
+                            <h4 style="color: #667eea; margin-top: 1rem;">Digital Reports</h4>
+                            <p style="color: #666;">Fast & Accurate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Hub Section -->
+            <div id="doctor-research" class="dashboard-section">
+                <div class="content-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; padding: 2rem;">
+                        <div>
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">🔬</div>
+                            <h2>Medical Research Hub</h2>
+                            <p style="margin: 1rem 0; opacity: 0.9;">Access latest medical research, drug information, clinical trials, and medical calculators</p>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=300&h=200&fit=crop" alt="Medical Research" style="width: 300px; height: 200px; border-radius: 15px; object-fit: cover; opacity: 0.8;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button onclick="showResearchTab('papers')" style="flex: 1; min-width: 200px; padding: 1rem; background: #667eea; color: white; border: 2px solid #667eea; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; transform: scale(1.05);" onmouseover="this.style.background='#5a6fd8'; this.style.transform='scale(1.1)'" onmouseout="this.style.background='#667eea'; this.style.transform='scale(1.05)'">📄 Latest Papers</button>
+                    <button onclick="showResearchTab('drugs')" style="flex: 1; min-width: 200px; padding: 1rem; background: #f8f9fa; color: #333; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#27ae60'; this.style.color='white'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='#f8f9fa'; this.style.color='#333'; this.style.transform='scale(1)'">💊 Drug Database</button>
+                    <button onclick="showResearchTab('trials')" style="flex: 1; min-width: 200px; padding: 1rem; background: #f8f9fa; color: #333; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#9b59b6'; this.style.color='white'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='#f8f9fa'; this.style.color='#333'; this.style.transform='scale(1)'">🧪 Clinical Trials</button>
+                    <button onclick="showResearchTab('calculators')" style="flex: 1; min-width: 200px; padding: 1rem; background: #f8f9fa; color: #333; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#f39c12'; this.style.color='white'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='#f8f9fa'; this.style.color='#333'; this.style.transform='scale(1)'">🧮 Medical Calculators</button>
+                </div>
+
+                <div id="research-papers" class="research-content">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div class="content-card">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                                <input type="text" placeholder="Search medical papers..." style="flex: 1; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px;">
+                                <button style="padding: 1rem; background: #667eea; color: white; border: none; border-radius: 10px;">🔍</button>
+                            </div>
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #27ae60; border-radius: 15px; margin-bottom: 1rem; background: rgba(39, 174, 96, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=80&h=80&fit=crop" alt="AI Research" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>AI in Cardiovascular Disease Diagnosis</h4>
+                                    <p style="color: #666; margin: 0.5rem 0;">Dr. Smith et al. - Nature Medicine</p>
+                                    <p style="color: #666; font-size: 0.9rem;">Published: Dec 2024</p>
+                                    <div style="margin-top: 1rem;">
+                                        <span style="background: #667eea; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin-right: 0.5rem;">Cardiology</span>
+                                        <span style="background: #27ae60; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">AI/ML</span>
+                                    </div>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#229954'; this.style.transform='scale(1.1)'" onmouseout="this.style.background='#27ae60'; this.style.transform='scale(1)'">Read</button>
+                            </div>
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #f39c12; border-radius: 15px; background: rgba(243, 156, 18, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=80&h=80&fit=crop" alt="Research" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>Novel Antibiotic Resistance Mechanisms</h4>
+                                    <p style="color: #666; margin: 0.5rem 0;">Dr. Johnson et al. - The Lancet</p>
+                                    <p style="color: #666; font-size: 0.9rem;">Published: Nov 2024</p>
+                                    <div style="margin-top: 1rem;">
+                                        <span style="background: #e74c3c; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin-right: 0.5rem;">Infectious Disease</span>
+                                        <span style="background: #9b59b6; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Microbiology</span>
+                                    </div>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e67e22'; this.style.transform='scale(1.1)'" onmouseout="this.style.background='#f39c12'; this.style.transform='scale(1)'">Read</button>
+                            </div>
+                        </div>
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=250&h=200&fit=crop" alt="Medical Research" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                            <h4 style="color: #667eea;">Latest Research</h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Stay Updated</p>
+                            <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">
+                                <p><strong>New Papers:</strong> 156</p>
+                                <p><strong>This Week:</strong> 23</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="research-drugs" class="research-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div class="content-card">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                                <input type="text" placeholder="Search drugs..." style="flex: 1; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px;">
+                                <button style="padding: 1rem; background: #667eea; color: white; border: none; border-radius: 10px;">🔍</button>
+                            </div>
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #27ae60; border-radius: 15px; margin-bottom: 1rem; background: rgba(39, 174, 96, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=80&h=80&fit=crop" alt="Drug" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>Amoxicillin</h4>
+                                    <p><strong>Class:</strong> Beta-lactam antibiotic</p>
+                                    <p><strong>Dosage:</strong> 250-500mg every 8 hours</p>
+                                    <p><strong>Indications:</strong> Bacterial infections</p>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 5px;">Details</button>
+                            </div>
+                        </div>
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=250&h=200&fit=crop" alt="Drugs" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                            <h4 style="color: #667eea;">Drug Database</h4>
+                            <p style="color: #666;">Comprehensive Info</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="research-trials" class="research-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div class="content-card">
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #9b59b6; border-radius: 15px; background: rgba(155, 89, 182, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=80&h=80&fit=crop" alt="Trial" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>CAR-T Cell Therapy for Lymphoma</h4>
+                                    <p><strong>Phase:</strong> Phase II</p>
+                                    <p><strong>Status:</strong> Recruiting</p>
+                                    <p><strong>Sponsor:</strong> National Cancer Institute</p>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #9b59b6; color: white; border: none; border-radius: 5px;">View</button>
+                            </div>
+                        </div>
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=250&h=200&fit=crop" alt="Trials" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                            <h4 style="color: #667eea;">Clinical Trials</h4>
+                            <p style="color: #666;">Latest Studies</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="research-calculators" class="research-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div class="content-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=60&h=60&fit=crop" alt="BMI" style="width: 60px; height: 60px; border-radius: 10px;">
+                                <h4>BMI Calculator</h4>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                                <input type="number" placeholder="Weight (kg)" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <input type="number" placeholder="Height (cm)" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <button style="width: 100%; padding: 0.8rem; background: white; color: #27ae60; border: none; border-radius: 5px; font-weight: bold;">Calculate BMI</button>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">Result: --</div>
+                        </div>
+                        
+                        <div class="content-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=60&h=60&fit=crop" alt="Calc" style="width: 60px; height: 60px; border-radius: 10px;">
+                                <h4>Drug Dosage Calculator</h4>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                                <input type="number" placeholder="Patient Weight (kg)" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <input type="number" placeholder="Dose per kg" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <button style="width: 100%; padding: 0.8rem; background: white; color: #667eea; border: none; border-radius: 5px; font-weight: bold;">Calculate Dose</button>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">Result: --</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Hub Section -->
+            <div id="doctor-research" class="dashboard-section">
+                <div class="content-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; padding: 2rem;">
+                        <div>
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">🔬</div>
+                            <h2>Medical Research Hub</h2>
+                            <p style="margin: 1rem 0; opacity: 0.9;">Access latest medical research, drug information, clinical trials, and medical calculators</p>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=300&h=200&fit=crop" alt="Medical Research" style="width: 300px; height: 200px; border-radius: 15px; object-fit: cover; opacity: 0.8;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <button onclick="showResearchTab('papers')" style="flex: 1; min-width: 200px; padding: 1rem; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer;">📄 Latest Papers</button>
+                    <button onclick="showResearchTab('drugs')" style="flex: 1; min-width: 200px; padding: 1rem; background: #f8f9fa; color: #333; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer;">💊 Drug Database</button>
+                    <button onclick="showResearchTab('trials')" style="flex: 1; min-width: 200px; padding: 1rem; background: #f8f9fa; color: #333; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer;">🧪 Clinical Trials</button>
+                    <button onclick="showResearchTab('calculators')" style="flex: 1; min-width: 200px; padding: 1rem; background: #f8f9fa; color: #333; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer;">🧮 Medical Calculators</button>
+                </div>
+
+                <div id="research-papers" class="research-content">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div class="content-card">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                                <input type="text" placeholder="Search medical papers..." style="flex: 1; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px;">
+                                <button style="padding: 1rem; background: #667eea; color: white; border: none; border-radius: 10px;">🔍</button>
+                            </div>
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #27ae60; border-radius: 15px; margin-bottom: 1rem; background: rgba(39, 174, 96, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=80&h=80&fit=crop" alt="AI Research" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>AI in Cardiovascular Disease Diagnosis</h4>
+                                    <p style="color: #666; margin: 0.5rem 0;">Dr. Smith et al. - Nature Medicine</p>
+                                    <p style="color: #666; font-size: 0.9rem;">Published: Dec 2024</p>
+                                    <div style="margin-top: 1rem;">
+                                        <span style="background: #667eea; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin-right: 0.5rem;">Cardiology</span>
+                                        <span style="background: #27ae60; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">AI/ML</span>
+                                    </div>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 5px;">Read</button>
+                            </div>
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #f39c12; border-radius: 15px; background: rgba(243, 156, 18, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=80&h=80&fit=crop" alt="Research" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>Novel Antibiotic Resistance Mechanisms</h4>
+                                    <p style="color: #666; margin: 0.5rem 0;">Dr. Johnson et al. - The Lancet</p>
+                                    <p style="color: #666; font-size: 0.9rem;">Published: Nov 2024</p>
+                                    <div style="margin-top: 1rem;">
+                                        <span style="background: #e74c3c; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin-right: 0.5rem;">Infectious Disease</span>
+                                        <span style="background: #9b59b6; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Microbiology</span>
+                                    </div>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #f39c12; color: white; border: none; border-radius: 5px;">Read</button>
+                            </div>
+                        </div>
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=250&h=200&fit=crop" alt="Medical Research" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                            <h4 style="color: #667eea;">Latest Research</h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Stay Updated</p>
+                            <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px;">
+                                <p><strong>New Papers:</strong> 156</p>
+                                <p><strong>This Week:</strong> 23</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="research-drugs" class="research-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div class="content-card">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                                <input type="text" placeholder="Search drugs..." style="flex: 1; padding: 1rem; border: 2px solid #e9ecef; border-radius: 10px;">
+                                <button style="padding: 1rem; background: #667eea; color: white; border: none; border-radius: 10px;">🔍</button>
+                            </div>
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #27ae60; border-radius: 15px; margin-bottom: 1rem; background: rgba(39, 174, 96, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=80&h=80&fit=crop" alt="Drug" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>Amoxicillin</h4>
+                                    <p><strong>Class:</strong> Beta-lactam antibiotic</p>
+                                    <p><strong>Dosage:</strong> 250-500mg every 8 hours</p>
+                                    <p><strong>Indications:</strong> Bacterial infections</p>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 5px;">Details</button>
+                            </div>
+                        </div>
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=250&h=200&fit=crop" alt="Drugs" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                            <h4 style="color: #667eea;">Drug Database</h4>
+                            <p style="color: #666;">Comprehensive Info</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="research-trials" class="research-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div class="content-card">
+                            <div style="display: flex; gap: 1rem; padding: 1.5rem; border: 2px solid #9b59b6; border-radius: 15px; background: rgba(155, 89, 182, 0.05);">
+                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=80&h=80&fit=crop" alt="Trial" style="width: 80px; height: 80px; border-radius: 10px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4>CAR-T Cell Therapy for Lymphoma</h4>
+                                    <p><strong>Phase:</strong> Phase II</p>
+                                    <p><strong>Status:</strong> Recruiting</p>
+                                    <p><strong>Sponsor:</strong> National Cancer Institute</p>
+                                </div>
+                                <button style="padding: 0.5rem 1rem; background: #9b59b6; color: white; border: none; border-radius: 5px;">View</button>
+                            </div>
+                        </div>
+                        <div class="content-card" style="text-align: center;">
+                            <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=250&h=200&fit=crop" alt="Trials" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;">
+                            <h4 style="color: #667eea;">Clinical Trials</h4>
+                            <p style="color: #666;">Latest Studies</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="research-calculators" class="research-content" style="display: none;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div class="content-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=60&h=60&fit=crop" alt="BMI" style="width: 60px; height: 60px; border-radius: 10px;">
+                                <h4>BMI Calculator</h4>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                                <input type="number" placeholder="Weight (kg)" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <input type="number" placeholder="Height (cm)" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <button style="width: 100%; padding: 0.8rem; background: white; color: #27ae60; border: none; border-radius: 5px; font-weight: bold;">Calculate BMI</button>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">Result: --</div>
+                        </div>
+                        
+                        <div class="content-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=60&h=60&fit=crop" alt="Calc" style="width: 60px; height: 60px; border-radius: 10px;">
+                                <h4>Drug Dosage Calculator</h4>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                                <input type="number" placeholder="Patient Weight (kg)" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <input type="number" placeholder="Dose per kg" style="width: 100%; padding: 0.8rem; margin-bottom: 0.5rem; border: none; border-radius: 5px;">
+                                <button style="width: 100%; padding: 0.8rem; background: white; color: #667eea; border: none; border-radius: 5px; font-weight: bold;">Calculate Dose</button>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px;">Result: --</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer style="background: #2c3e50; color: white; padding: 3rem 0; text-align: center; margin-top: 3rem;">
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 3rem;">
+                    <div>
+                        <h3 style="color: #3498db; margin-bottom: 1.5rem;">🏥 Hospital Management</h3>
+                        <p style="line-height: 1.6;">Providing quality healthcare services with advanced technology and compassionate care.</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 1.5rem;">Quick Links</h4>
+                        <p style="margin-bottom: 0.8rem;">Emergency: +91 98765 43210</p>
+                        <p style="margin-bottom: 0.8rem;">Appointments: +91 98765 43211</p>
+                        <p>Email: info@hospital.com</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 1.5rem;">Services</h4>
+                        <p style="margin-bottom: 0.8rem;">24/7 Emergency Care</p>
+                        <p style="margin-bottom: 0.8rem;">Specialized Treatments</p>
+                        <p>Advanced Diagnostics</p>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid #34495e; padding-top: 2rem;">
+                    <p>&copy; 2025 Hospital Management System. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Chat Support Widget -->
+    <div class="chat-widget">
+        <button class="chat-toggle" onclick="toggleChat()" title="Chat with Hospital Staff">💬</button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div>
+                    <strong>🏥 Hospital Support</strong>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">Online now</div>
+                </div>
+                <button class="chat-close" onclick="closeChat()">✕</button>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+                <button class="chat-send" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentUserType = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('login-mode');
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // User type selector
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Signup form
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userType = document.querySelector('.type-btn.active').getAttribute('data-type');
+            
+            if (username && password) {
+                loginUser(username, userType);
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        function handleGoogleSignIn(response) {
+            const userType = document.querySelector('.type-btn.active').getAttribute('data-type');
+            
+            // Decode JWT token to get user info
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            const userEmail = payload.email;
+            const userName = payload.name;
+            
+            // Show success message
+            const successMsg = document.createElement('div');
+            successMsg.innerHTML = `<p style="color: #28a745; margin: 1rem 0;">✅ Authenticated as ${userName} (${userEmail})</p>`;
+            document.querySelector('.g_id_signin').after(successMsg);
+            
+            setTimeout(() => {
+                loginUser(userName, userType);
+            }, 1000);
+        }
+
+        function loginUser(username, userType) {
+            // Show loading
+            showLoadingSkeletons();
+            
+            setTimeout(() => {
+                currentUser = username;
+                currentUserType = userType;
+                
+                // Remove login mode styling
+                document.body.classList.remove('login-mode');
+                
+                // Hide login page
+                document.getElementById('loginPage').style.display = 'none';
+                
+                // Show appropriate dashboard
+                if (userType === 'patient') {
+                    document.getElementById('patientDashboard').classList.add('active');
+                    document.getElementById('patientName').textContent = username;
+                    document.getElementById('mobilePatientName').textContent = username;
+                } else {
+                    document.getElementById('doctorDashboard').classList.add('active');
+                    document.getElementById('doctorName').textContent = 'Dr. ' + username;
+                    document.getElementById('mobileDoctorName').textContent = 'Dr. ' + username;
+                }
+                
+                // Sync theme toggle buttons
+                syncThemeButtons();
+                
+                // Hide loading after content loads
+                hideLoadingSkeletons();
+            }, 1500);
+        }
+
+        // Sync theme toggle buttons
+        function syncThemeButtons() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const themeBtns = document.querySelectorAll('.theme-toggle');
+            themeBtns.forEach(btn => {
+                btn.textContent = isDark ? '☀️' : '🌙';
+            });
+        }
+
+        function forgotPassword() {
+            const email = prompt('Enter your email address:');
+            if (email) {
+                alert('Password reset link sent to ' + email);
+            }
+        }
+
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('forgotLink').style.display = 'none';
+            document.getElementById('signupLink').style.display = 'none';
+            document.getElementById('loginLink').style.display = 'inline';
+        }
+        
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('forgotLink').style.display = 'inline';
+            document.getElementById('signupLink').style.display = 'inline';
+            document.getElementById('loginLink').style.display = 'none';
+        }
+        
+        function handleSignup(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const userType = document.querySelector('.type-btn.active').getAttribute('data-type');
+            
+            if (firstName && lastName && email && password) {
+                alert(`Account created successfully!\nName: ${firstName} ${lastName}\nType: ${userType}\nYou can now login with your credentials.`);
+                showLogin();
+                document.getElementById('signupForm').reset();
+            }
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function showDoctorSection(sectionId) {
+            showSection(sectionId);
+        }
+
+        function logout() {
+            currentUser = null;
+            currentUserType = null;
+            
+            // Add login mode styling back
+            document.body.classList.add('login-mode');
+            
+            // Hide dashboards
+            document.getElementById('patientDashboard').classList.remove('active');
+            document.getElementById('doctorDashboard').classList.remove('active');
+            
+            // Show login page
+            document.getElementById('loginPage').style.display = 'block';
+            
+            // Reset form
+            document.getElementById('loginForm').reset();
+        }
+
+        // Toggle profile credentials in header
+        function toggleProfile() {
+            const patientCreds = document.getElementById('patientCredentials');
+            const doctorCreds = document.getElementById('doctorCredentials');
+            
+            if (patientCreds && patientCreds.style.display === 'none') {
+                patientCreds.style.display = 'block';
+            } else if (patientCreds) {
+                patientCreds.style.display = 'none';
+            }
+            
+            if (doctorCreds && doctorCreds.style.display === 'none') {
+                doctorCreds.style.display = 'block';
+            } else if (doctorCreds) {
+                doctorCreds.style.display = 'none';
+            }
+        }
+
+        // Toggle user info by clicking name
+        function toggleUserInfo() {
+            toggleProfile();
+        }
+
+        // Toggle patient details
+        function toggleDetails(button) {
+            const detailsDiv = button.previousElementSibling;
+            if (detailsDiv.style.display === 'none') {
+                detailsDiv.style.display = 'block';
+                button.textContent = 'Hide Details';
+            } else {
+                detailsDiv.style.display = 'none';
+                button.textContent = 'Show Details';
+            }
+        }
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const overlay = document.querySelector('.mobile-nav-overlay');
+            const patientMenu = document.getElementById('mobileNavMenu');
+            const doctorMenu = document.getElementById('doctorMobileNavMenu');
+            overlay.classList.add('active');
+            if (patientMenu) patientMenu.classList.add('active');
+            if (doctorMenu) doctorMenu.classList.add('active');
+        }
+
+        function closeMobileMenu() {
+            const overlay = document.querySelector('.mobile-nav-overlay');
+            const patientMenu = document.getElementById('mobileNavMenu');
+            const doctorMenu = document.getElementById('doctorMobileNavMenu');
+            overlay.classList.remove('active');
+            if (patientMenu) patientMenu.classList.remove('active');
+            if (doctorMenu) doctorMenu.classList.remove('active');
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeBtns = document.querySelectorAll('.theme-toggle');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeBtns.forEach(btn => {
+                btn.textContent = isDark ? '☀️' : '🌙';
+            });
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Loading skeletons
+        function showLoadingSkeletons() {
+            const statsGrid = document.querySelector('.stats-grid');
+            if (statsGrid) {
+                statsGrid.innerHTML = `
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                    <div class="skeleton skeleton-card"></div>
+                `;
+            }
+        }
+
+        function hideLoadingSkeletons() {
+            // Restore original stats grid content
+            const statsGrid = document.querySelector('.stats-grid');
+            if (statsGrid && statsGrid.innerHTML.includes('skeleton')) {
+                statsGrid.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">2</div>
+                        <div>Upcoming Appointments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div>Total Visits</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div>Pending Bills</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">A+</div>
+                        <div>Blood Group</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize theme
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+            syncThemeButtons();
+        });
+
+        // Add ripple effect to buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn')) {
+                const ripple = document.createElement('span');
+                const rect = e.target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255,255,255,0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                e.target.style.position = 'relative';
+                e.target.style.overflow = 'hidden';
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            }
+            
+            if (e.target.classList.contains('btn') && !e.target.classList.contains('nav-btn') && !e.target.classList.contains('logout-btn') && e.target.textContent !== 'Show Details' && e.target.textContent !== 'Hide Details') {
+                alert('Action: ' + e.target.textContent);
+            }
+        });
+        
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Chat Support Functions
+        let chatMessages = [
+            { type: 'staff', text: 'Hello! How can I help you today?', time: new Date() }
+        ];
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.toggle('active');
+        }
+
+        function closeChat() {
+            document.getElementById('chatWindow').classList.remove('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Add user message
+                chatMessages.push({ type: 'user', text: message, time: new Date() });
+                input.value = '';
+                
+                // Simulate staff response
+                setTimeout(() => {
+                    const responses = [
+                        'Thank you for your message. A staff member will assist you shortly.',
+                        'I understand your concern. Let me connect you with the right department.',
+                        'We appreciate your patience. How else can I help you?',
+                        'Your request has been noted. Is there anything else I can assist with?'
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    chatMessages.push({ type: 'staff', text: randomResponse, time: new Date() });
+                    renderMessages();
+                }, 1000);
+                
+                renderMessages();
+            }
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = chatMessages.map(msg => `
+                <div class="chat-message ${msg.type}">
+                    ${msg.text}
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Add stagger animation to stat cards
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const statCards = document.querySelectorAll('.stat-card');
+                statCards.forEach((card, index) => {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                });
+            }, 100);
+            
+            // Initialize chat
+            renderMessages();
+        });
+
+        // Enter key to send message
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.id === 'chatInput') {
+                sendMessage();
+            }
+        });
+
+        // Research Hub Functions
+        function showResearchTab(tabName) {
+            // Reset all tab buttons
+            document.querySelectorAll('#doctor-research button[onclick*="showResearchTab"]').forEach((btn, index) => {
+                btn.style.background = '#f8f9fa';
+                btn.style.color = '#333';
+                btn.style.border = '2px solid #e9ecef';
+                btn.style.transform = 'scale(1)';
+                
+                // Add hover effects
+                btn.onmouseover = function() {
+                    if (!this.classList.contains('active')) {
+                        const colors = ['#667eea', '#27ae60', '#9b59b6', '#f39c12'];
+                        this.style.background = colors[index] || '#667eea';
+                        this.style.color = 'white';
+                        this.style.transform = 'scale(1.05)';
+                    }
+                };
+                btn.onmouseout = function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.background = '#f8f9fa';
+                        this.style.color = '#333';
+                        this.style.transform = 'scale(1)';
+                    }
+                };
+            });
+            
+            // Remove active class from all
+            document.querySelectorAll('#doctor-research button[onclick*="showResearchTab"]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Activate clicked button
+            event.target.classList.add('active');
+            event.target.style.background = '#667eea';
+            event.target.style.color = 'white';
+            event.target.style.border = '2px solid #667eea';
+            event.target.style.transform = 'scale(1.05)';
+            
+            // Hide all content
+            document.querySelectorAll('.research-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show selected content
+            document.getElementById('research-' + tabName).style.display = 'block';
+        }
+
+        // Research Hub Functions
+        function showResearchTab(tabName) {
+            document.querySelectorAll('.research-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById('research-' + tabName).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
